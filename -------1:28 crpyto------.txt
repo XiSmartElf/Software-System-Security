@@ -1,0 +1,71 @@
+-------1/28 crpyto------
+
+crypto is not the solution. it' spart of the system. It's not easy. not cheap
+modern, aplied cryto
+
+<Confidentiality>
+
+1. Threat: 
+Listen /oberse the network 
+observe the endpoint
+someone could temper the message
+ 	The aversay is the networl. (-Doleve-Yao adversary)
+ 		-read all messages
+ 		-change any message
+ 		-delete any message
+
+2. Harm:
+contents of message could be disclosed
+
+3. Vulnerbility:
+network under control of adversary
+
+4. Countermeasure
+Encryption
+
+********************************************************************
+
+Shared-key Encryption
+
+O. k = Gen(len)
+1. Alice: C = Encrypt ( m  ; k)         where m is i.e.plaintext, and C is Ciphertext 
+2. Alice --> send to Bob : C
+3. Bob : m = Decrpt(c ; k)  			where ...
+
+
+(Gen, Enc, Dec) encription scheme --> Ctyptosystem
+
+
+Kerchhoff's principle: 
+
+1. Secrecy of the message should depend only on the key being secret.
+   espescially not depend on the encrption scheme itself veing secret.
+
+2. For each key, Enc behaves like a random function
+	--> the map from the plainttext m to ciphertext c should be random
+		randomness? real or look like real. ex:
+												One-time pad(OTP) 
+												 - len key =  
+												 - one key / message
+												 - exchange keys securely
+
+												 Enc(m;k) m xor K
+Block cipher
+
+ 	Enc(m, k) m is fixed length. Ex: 
+ 									- DES (block size = 64 bits, key size is 56 bits)
+ 									- 3 DES (bloack size = 64 bits, key size: 112 bits or 168 bits) since hardware gets better
+ 									- AES (block size = 128 bits, key size 128, 192, 256 bits)
+
+ 			break a crypto system?
+ 								brute force -  try every key 2^256 for AES 256 bits key sisze
+
+ 								break attark that succeeds in fewer steps than brute force ^99.5(secruity level this is what you care about as people being smart)
+
+
+
+
+
+
+
+
