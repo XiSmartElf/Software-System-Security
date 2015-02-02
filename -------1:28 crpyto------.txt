@@ -55,7 +55,11 @@ Block cipher
  	Enc(m, k) m is fixed length. Ex: 
  									- DES (block size = 64 bits, key size is 56 bits)
  									- 3 DES (bloack size = 64 bits, key size: 112 bits or 168 bits) since hardware gets better
+ 												<you can use 2 or 3 keys for DES, 112 or 168>
  									- AES (block size = 128 bits, key size 128, 192, 256 bits)
+
+ 									AES pretty fast (no much diff btw 3des and aes)and newer. performance better harder to break.
+ 									crypto period
 
  			break a crypto system?
  								brute force -  try every key 2^256 for AES 256 bits key sisze
