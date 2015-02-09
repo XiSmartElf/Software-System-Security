@@ -1,0 +1,69 @@
+-------2/9 crpyto and princle of Security------
+
+confi+Integrity
+1. Enc +MAC  ke km Enc(m;ke),MAC(m;km)     SSH (not encouraged to use)
+2. Enc then MAC.   C=Enc(m;ke) t=MAC(c;km)   send c,t   prrarbly most secure    IPsec
+3. MAC then Enc.   t=MAC(m;km)  c=Enc(m,t;ke)  send c    SSL    padding oracle attack    (Way to go)
+
+GCM Galos/ counter Mode
+
+***********************************
+
+SSL=TLS secure socket layer: 1996
+  Sessions 
+Client <----> Server
+
+record: msg protected by MAC then ENC
+
+certificates: binding bwt and identity and a key
+
+				ids:indentity of the subject
+				ks: subjecy's public key
+				kI: issuer's private key
+
+digital certificate:  I<<S>> sign(ids, ks; kI)
+
+
+****************************  Principles of Security   *******************
+
+Accountablity: Hold principals repinsible for their actions
+
+1. Authorization: Mechanisim that governs whether actions are permited
+2. Autentication: mechanisims that binds principals to actions
+3. Audit: mechanisms that records that actions and principals that take them
+
+1.Defense in Depth: 
+Prefer complemntary mechanism over single one, Independent/ overlapping
+
+2.Non-securecy of design:
+secuity should not depend on secrecy of deisgn or mechanism
+
+3.Economy of Mechanism:
+prefer mechinisim that are simple and small.
+TCB: trusted computing base. 
+Keep the TCB small
+
+4.Failsafr Dafaults:
+Presenese of previllage
+rather than absense of probibition
+Should be the basis for allowing actions
+
+5.Least Privilege (keep privillage small):
+a Principle should have mimum previllage it need to accomplish its desired operations
+
+6. Complete Mediation:
+requested by princopal must be intercepted and determined to be accpetable according to policy
+<Reference Monitor> imply comp Med
+
+7. Separation of privilege:
+--> Different's operations should require different privilleges
+--> single operations might ometimes require multiple privilleges.
+
+
+
+
+
+
+
+
+
