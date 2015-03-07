@@ -1,0 +1,21 @@
+Question1:
+
+Protocol
+Enc and Dec are one of the block cipher scheme.
+0. k = Gen(len) // Alice and Bob somehow share key k
+1. c_0 = t_0 = iv // Alice and Bob somehow share iv
+2. Alice: t_i = Enc(t_{i-1} XOR m_i; k) // message m is equally divided into n blocks. m_n is the nth block of the plaintext. t is the tag which has the same size with message. t_n is the nth block of the tag. Tag consists of t_1 to t_n.
+3. Alice: m' = m || t // Tag t is appended to message m, forming m', which has 2n blocks.
+4. Alice: c_i = Enc(c_{i-1} XOR m'_i; k) // The ciphertext c consists of c_1 to c_{2n}.
+5. Alice->Bob: c
+6. Bob: m'_i = Dec(c_i; k) XOR c_{i-1} // m' is message m concatenated with tag t. So, original message m consists of m'_1 to m'_n and tag t consists of m'_{n+1} to m'_{2*n}.
+7. Bob: tt_0 = iv // The recovered tag tt consists of tt_1 to tt_n.
+8. Bob: Verify: tt_i = Enc(tt_{i-1} XOR m_i; k) // If tt is equals to tag t, the data integrity is maintained. Otherwise, it is modified by the adversary.
+
+Minimum number of encryption function Enc call is 2n.
+Alice calls Enc function for n time to get tag t as the first step. Tag t is exactly the first half of the ciphertext c. Then Enc functions is called for n times on the tag t to get the second half of the ciphertext c. The Enc function is called 2n times totally.
+
+Dolev-Yao Attack:
+The attack intercepts the whole ciphertext c with size 2n. He can drop the nth block and 2nth block and then send the left ciphertext to Bob with size 2n-2. This ciphertext can pass the integrity check on Bob.
+
+

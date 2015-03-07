@@ -1,0 +1,16 @@
+The right key is 0110100101101110011100110111010001101001011011110110001101110101
+The plaintext is Martin Luther King's I have a Dream.
+
+My program finds the right key and plaintext in 2183967264880 nano second (around 35 minutes) on my 8GB RAM i7-core PC.
+
+This approach is to try every possible key exhaustedly. There are 2^24 possibilities to try. The question provides me with 36-bit key and there are 28 bits left to guess. 4 out of 28 bits are parity bits. In modern DES, the parity bit is useless. So, setting every parity bit to 1 is a good way to save the brute force search time. I just need to guess 24 bits. Within 2^24 trials, the program will get the right key.
+
+For each key k_i, the program will try if it can yield the right text. There are three possible results: 1. Using key k_i will raise exception( javax.crypto.BadPaddingException: Given final block not properly padded). This indicates that the key k_i is not the correct key. 2. Using key k_i doesn't raise exception. The recovered text needs to verify if it has invalid encoded character in the following way:
+// reference: http://docs.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html
+/*
+Charset charset = Charset.forName("US-ASCII");
+CharsetEncoder ASCIIEncoder = charset.newEncoder();
+String s = new String(recoveredText);
+boolean b = ASCIIEncoder.canEncode(s); 
+*/
+If b is false, which means the recoverd text cannot be encoded into ACSII, the key k_i is also wrong. 3. If Using key k_i doesn't raise exception and b is true, this key k_i is the right key.

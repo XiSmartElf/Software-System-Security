@@ -1,0 +1,189 @@
+<html>
+
+<head>
+<link rel="stylesheet" type="text/css" href="notes.css">
+<title>Applied Cryptography</title>
+</head>
+
+<body class=notes> 
+
+<h1>Homework 1:  Part II</h1>
+
+<p>Due: <span class="duedate">Wednesday, February 11, 11:59 pm</span>.</p>
+
+<blockquote>
+<p><i>Few false ideas have more firmly gripped the minds of so many 
+intelligent men than the one that, if they just tried, they could 
+invent a cipher that no one could break.</i> 
+&mdash;David Kahn</p>
+</blockquote>
+
+<h3>0. Hybrid Decryption</h3>
+
+<p>If you're reading this plaintext, 
+you've already solved Part I of this homework.</p>
+
+<p><span class="phead">What to submit:</span> a directory 
+named <tt>hybrid</tt> containing the source code for
+your program that decrypted Part II.</p>
+
+<p><i>Evaluation:</i> We will grade
+your program using different files (keys, ciphertexts, etc.) than just
+those supplied in <tt>hw1.II.zip</tt>.  If your program fails to correctly decrypt 
+the new ciphertexts we give it, you will receive partial-to-no credit.
+If your program fails to compile, you will receive no credit.  </p>
+
+<h3>1. Authenticated Encryption</h3>
+
+<p>
+CBC-MAC is a message authentication code based on cipher-block chaining.
+With CBC-MAC, the tag t for a message m under key k is the last ciphertext block produced by encryption of
+m with k in CBC mode.  That is,</p>
+<blockquote>
+<p>
+CBC-MAC(m; k) = c_n
+</p>
+</blockquote>
+<p>where c_n = Enc(c_{n-1} xor m_n; k), and n is the number of blocks in the message.  
+Enc could be AES or some other block cipher; it doesn't matter for this problem.
+Assume that Enc is deterministic.
+Throughout this problem, assume that the message length is a multiple of
+the block length and that no padding scheme is used.   (Indeed, none is necessary
+under the assumption.)</p>
+
+<p>A CS 5430 student proposes the following method, which we'll call
+AECBC, for authenticated encryption:</p>
+
+<blockquote><p>AECBC:  Assume that Alice and Bob already share a key
+k. Alice computes the CBC-MAC tag t of message m under key
+k with initialization vector iv.  She then appends t to m, forming a new plaintext m'. She
+encrypts m' in CBC mode with the same k and iv, forming ciphertext c.  Alice sends c to
+Bob.  Bob can then decrypt and authenticate the message.</p></blockquote>
+
+<p>AECBC is an instance of Mac-then-Encrypt.  Normally,
+Mac-then-Encrypt would require processing all n plaintext
+blocks twice, once for each key&mdash;that is, once for the
+MAC operation, and once again for the encryption operation. 
+But AECBC attempts an optimization:  instead
+of using separate keys for encryption and authentication, it
+uses only a single key.</p>
+
+<ol>
+<li>With the protocol narration 
+notation used in the <a href="http://www.cs.cornell.edu/courses/CS5430/2015sp/notes/crypto.php">course notes
+on applied cryptography</a>,
+write a full protocol specification for AECBC, 
+including decryption and authentication.
+Specifications that instead use different notation
+(e.g., from one textbook or another) will not receive full credit.</li>
+<li>Propose an implementation of AECBC that minimizes the number of
+calls that need to be made to encryption function Enc.  What is the minimum number?
+Justify your answer.  <i>Hint: fewer than 2n.</i></li>
+<li>Unfortunately, AECBC does not provide integrity.  That
+is, Bob will not be able to detect changes made to the message
+by a Dolev-Yao attacker.  Show that this is true by clearly
+and precisely describing an attack on AECBC.</li>
+</ol>
+
+<p><i>The moral of the story is:  don't invent your own cryptographic
+protocols, and don't use one key for two (or more) purposes.</i></p>
+
+<p><span class="phead">What to submit:</span> a directory 
+named <tt>aecbc</tt> containing a text or PDF file, named <tt>aecbc.txt</tt>
+or <tt>aecbc.pdf</tt>, with your answers to the above questions.</p>
+
+<p><i>Evaluation:</i> We will grade
+your answer based on its correctness and clarity.</p>
+
+<h3>2. Digital Signatures</h3>
+
+<p>Generate an RSA key pair.  Name the public key file
+<tt><i>netid</i>_rsa_ver.bin</tt> and the private key file <tt><i>netid</i>_rsa_sign.bin</tt>,
+where <i>netid</i> is your Cornell NetID.
+The public key file should contain the raw bytes of an X.509 
+encoding of the key. The private key should contain the raw bytes of a 
+PKCS8 encoding of the key. Build a program that signs and verifies signatures.
+Sign your submission file <tt><i>netid</i>_hw1.zip</tt> (described at the end of this
+page) with the signing key.  Save the raw bytes of that signature in
+a file named <tt><i>netid</i>_hw1.zip.sig</tt>.</p>
+
+<p><span class="phead">What to submit:</span> a directory 
+named <tt>sign</tt> containing your Java implementation.
+Your directory should also contain a text or PDF file named <tt>keylength.txt</tt>
+or <tt>keylength.pdf</tt>.  This file should justify
+your choice of key length.</p>
+
+<p><i>Evaluation:</i> We will grade your answer by running
+our own signature verification program to ascertain whether
+the signature you provide is valid w.r.t. the files you provide.
+If your signature is not valid, we will look at your signing
+program and might give you partial credit based on it.</p>
+
+<h3>3. DES Crack</h3>
+
+<p>The following file was encrypted with DES in CBC mode with
+PKCS#5 padding:  
+<a href="http://www.cs.cornell.edu/courses/CS5430/2015sp/hw/1/hw1des.bin">
+<tt>hw1des.bin</tt></a>.
+The file contains the raw bytes output from the DES encryption.</p>
+
+<p>You have learned the following information:</p>
+<ul>
+<li>The plaintext is English.</li>
+<!--<li>The encryption key was chosen in a particularly poor way: it's based
+on an English word.  In particular, someone chose a word W from this
+<a href="http://www.cs.cornell.edu/courses/CS5430/2015sp/hw/1/words.txt">
+word list</a>, then converted W to a key as follows:
+<ul>
+<li>Replace each character in W with a 0 followed by its 7-bit ASCII representation,
+yielding 8 bits total for each character.
+If W had C characters, this yields an 8C-bit sequence S.</li>
+<li>If S has more than 64 bits, truncate S to make it 64 bits long.</li>
+<li>If S has fewer than 64 bits, pad S at the end with 0's to make it 64 bits long.</li>
+<li>Use the resulting sequence as the key.</li>
+</ul>
+</li>-->
+<li> The first 36 bits of the encryption key are in the file 
+    <a href="http://www.cs.cornell.edu/courses/CS5430/2015sp/hw/1/partialkey.txt">
+    <tt>partialkey.txt</tt></a>.
+    You don't know what the last 28 bits are.</li>
+<li>The initialization vector used for CBC mode is all zeroes.</li>
+</ul>
+
+<p>Your task is to recover the plaintext. You may use any combination
+of programming languages, analysis techniques, third-party tools, 
+etc. that you like.  We make no restrictions.</p>
+
+<p><i>Warning:</i> We estimate that, using Java, the computation for this could take 
+longer than 24 hours.  You should get
+started early on this problem!</p>
+
+<p><i>Hint:</i> The <a href="http://www.openssl.org/docs/apps/enc.html">
+OpenSSL implementation of DES</a> is much faster
+than Java's implementation.</p>
+
+<p><span class="phead">What to submit:</span> a directory 
+named <tt>crack</tt> containing the code you wrote.
+Your directory should also include a file named <tt>plaintext.txt</tt>
+containing the plaintext, and <tt>solution.txt</tt> or <tt>solution.pdf</tt>
+explaining how your solution works.</p>
+
+<h3>Submission</h3>
+
+<p>Submit</p>
+<ul><li>a file named <tt>hw1.zip</tt> containing all the folders
+described above,</li>
+<li>a file named <tt>sig.bin</tt> containing the raw bytes
+of your signature on <tt>hw1.zip</tt>,</li>
+<li>and a file named <tt>rsa_ver.bin</tt>
+containing the raw bytes of an X.509 encoding of your signature 
+verification key.</li>
+</ul>
+
+<p>Submit those three files to the Homework 1 assignment on CMS.</p>
+
+<p>Submissions that do not adhere to the naming requirements stipulated here
+will lose points.</p>
+
+</body>
+</html>

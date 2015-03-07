@@ -1,0 +1,4 @@
+The keylength is 3072bit. The hash function is SHA-256.
+GenPubPrivKey.java generates the private key to file "rsa_sign.bin" and public key to file "rsa_ver.bin" to the same directory.
+Sign.java needs the file "hw1.zip" and "rsa_sign.bin" in the same directory to sign the data. The signature will be put in file "sig.bin".
+Verify.java needs the file "hw1.zip", "sig.bin" and "rsa_ver.bin" in the same directory to verify the signature.

@@ -43,7 +43,7 @@ prefer mechinisim that are simple and small.
 TCB: trusted computing base. 
 Keep the TCB small
 
-4.Failsafr Dafaults:
+4.Failsafe Dafaults:
 Presenese of previllage
 rather than absense of probibition
 Should be the basis for allowing actions
